@@ -263,6 +263,10 @@
       color: #aaa;
       line-height: 1.7;
     }
+    
+    .method-box strong {
+  color: #ffffff;
+}
 
     .method-box p + p { text-indent: 0; }
 
@@ -342,7 +346,7 @@
 <!-- ── HEADER ── -->
 <header>
   <div class="header-inner">
-    <span class="kicker">Data Analysis · NHANES 2017–2018 · United States</span>
+    <span class="kicker">Data Analysis · NHANES 2021-2023 · United States</span>
     <h1>Can Your <em>Wage</em> Predict<br>Your Health?</h1>
     <p class="deck">A data-driven investigation into whether income inequality leaves a biological signature — and what it means for all of us.</p>
     <div class="byline">
@@ -370,7 +374,7 @@
 
   <h2>What the Data Shows</h2>
 
-  <p>The cleaned dataset includes <strong>4,138 adults</strong> with complete data across all variables, drawn from the NHANES 2017–2018 cycle. Participants were grouped by income-to-poverty ratio into five bands from "Below poverty" to "High."</p>
+  <p>The cleaned dataset includes <strong>4,138 adults</strong> with complete data across all variables, drawn from the NHANES 2021-2023 cycle. Participants were grouped by income-to-poverty ratio into five bands from "Below poverty" to "High."</p>
 
   <div class="stat-row">
     <div class="stat-card">
@@ -395,7 +399,7 @@
 
   <div class="figure">
     <img src="outputs/figures/01_depression_by_income.png" alt="Bar chart showing average PHQ-9 depression score by income group"/>
-    <figcaption>FIG. 1 — Average PHQ-9 depression score by income group. Lower scores indicate better mental health. Source: NHANES 2017–2018.</figcaption>
+    <figcaption>FIG. 1 — Average PHQ-9 depression score by income group. Lower scores indicate better mental health. Source: NHANES 2021-2023.</figcaption>
   </div>
 
   <div class="finding">
@@ -413,7 +417,7 @@
 
   <div class="figure">
     <img src="outputs/figures/03_depression_severity_stacked.png" alt="Stacked bar chart showing proportion of depression severity categories by income group"/>
-    <figcaption>FIG. 2 — Distribution of PHQ-9 depression severity categories by income group. The proportion experiencing moderate-to-severe depression is visibly higher in lower income bands. Source: NHANES 2017–2018.</figcaption>
+    <figcaption>FIG. 2 — Distribution of PHQ-9 depression severity categories by income group. The proportion experiencing moderate-to-severe depression is visibly higher in lower income bands. Source: NHANES 2021-2023.</figcaption>
   </div>
 
   <p>Lower income groups carry a heavier burden of moderate and severe depression — not just marginally higher average scores. Moderate-to-severe depression (PHQ-9 ≥ 10) is the threshold at which clinical intervention is typically recommended. Lower income is therefore associated not just with feeling slightly worse, but with a significantly higher likelihood of experiencing depression serious enough to warrant treatment.</p>
@@ -433,14 +437,14 @@
 
   <div class="figure">
     <img src="outputs/figures/02_bp_risk_by_income.png" alt="Bar chart showing percentage of participants with elevated blood pressure by income group"/>
-    <figcaption>FIG. 3 — Percentage of participants with systolic blood pressure ≥ 130 mmHg (the clinical threshold for elevated BP, per American Heart Association guidelines) by income group. Source: NHANES 2017–2018.</figcaption>
+    <figcaption>FIG. 3 — Percentage of participants with systolic blood pressure ≥ 130 mmHg (the clinical threshold for elevated BP, per American Heart Association guidelines) by income group. Source: NHANES 2021-2023.</figcaption>
   </div>
 
   <p>There is a visible trend in elevated blood pressure rates across income groups, with lower income participants more likely to exceed the 130 mmHg systolic threshold. However, our regression found this did not reach statistical significance once we controlled for age and education (income coefficient: +0.069, p = 0.689). Age was the dominant predictor — systolic BP rises naturally with age, and this effect swamps the income signal.</p>
 
   <div class="figure">
     <img src="outputs/figures/04_cholesterol_boxplot.png" alt="Box plot showing distribution of total cholesterol by income group"/>
-    <figcaption>FIG. 4 — Distribution of total cholesterol (mg/dL) by income group. Diamond marker shows the group mean. Outliers shown as faded points. Source: NHANES 2017–2018.</figcaption>
+    <figcaption>FIG. 4 — Distribution of total cholesterol (mg/dL) by income group. Diamond marker shows the group mean. Outliers shown as faded points. Source: NHANES 2021-2023.</figcaption>
   </div>
 
   <p>Cholesterol presents a borderline result: a positive income coefficient of 0.88 (p = 0.057) — just above the conventional significance threshold. This may reflect the fact that higher-income individuals can afford richer diets, or it may simply reflect the complexity of cholesterol metabolism, which is also heavily influenced by genetics and medication not captured here.</p>
@@ -490,7 +494,7 @@
 
   <div class="figure">
     <img src="outputs/figures/05_regression_coefficients.png" alt="Bar chart of regression coefficients for income predicting each health outcome"/>
-    <figcaption>FIG. 5 — Regression coefficients for income-to-poverty ratio predicting each health outcome, controlling for age and education. Blue = statistically significant (p &lt; 0.05). Source: NHANES 2017–2018.</figcaption>
+    <figcaption>FIG. 5 — Regression coefficients for income-to-poverty ratio predicting each health outcome, controlling for age and education. Blue = statistically significant (p &lt; 0.05). Source: NHANES 2021-2023.</figcaption>
   </div>
 
   <p>The negative coefficient for depression is the most important number in this analysis — higher income predicts lower depression, and this survives controls for both age and education. Blood pressure is dominated by age, and cholesterol remains hard to predict from socioeconomic variables alone. The R² values are modest across all models, which is expected in health data, but an R² of 0.068 for depression still represents a meaningful signal from just three predictors.</p>
@@ -532,7 +536,7 @@
 
   <h2>Data & Reproducibility</h2>
 
-  <p>All analysis code is available in the accompanying GitHub repository. The dataset is from the <strong>NHANES 2017–2018 survey cycle</strong>, publicly available from the US Centers for Disease Control. Scripts run sequentially in Python (cleaning, SQL, regression) and R (visualisations) from a single cleaned CSV. Contextual statistics were scraped from the Mental Health Foundation, WHO, and Mental Health America using a Python <code>BeautifulSoup</code> scraper. See the README for full reproduction instructions.</p>
+  <p>All analysis code is available in the accompanying GitHub repository. The dataset is from the <strong>NHANES 2021-2023 survey cycle</strong>, publicly available from the US Centers for Disease Control. Scripts run sequentially in Python (cleaning, SQL, regression) and R (visualisations) from a single cleaned CSV. Contextual statistics were scraped from the Mental Health Foundation, WHO, and Mental Health America using a Python <code>BeautifulSoup</code> scraper. See the README for full reproduction instructions.</p>
 
 </article>
 
@@ -540,7 +544,7 @@
 <footer>
   <div class="footer-inner">
     <strong>Data Sources</strong><br>
-    NHANES 2017–2018 · Centers for Disease Control and Prevention · wwwn.cdc.gov/nchs/nhanes<br>
+    NHANES 2021-2023 · Centers for Disease Control and Prevention · wwwn.cdc.gov/nchs/nhanes<br>
     Mental Health Foundation · mentalhealth.org.uk<br>
     World Health Organisation · who.int<br>
     Mental Health America · mhanational.org<br><br>
