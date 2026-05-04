@@ -168,5 +168,5 @@ The full write-up and interpretation of findings is available in `blog.html`.
 
 ## Author
 
-Undergraduate Data Science Project — [Your Name]
-[Your University] — [Academic Year]
+Undergraduate Data Science Project — [Anya Briddon]
+[University of Exeter]
