@@ -1,0 +1,18 @@
+# Database files (auto-generated)
+*.db
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Output files (reproduced by running scripts)
+outputs/tables/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+.venv/

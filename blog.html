@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Can Your Wage Predict Your Health? | NHANES Analysis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1a1a;
+      --ink-light: #444;
+      --ink-muted: #888;
+      --paper: #faf8f4;
+      --paper-warm: #f3ede3;
+      --accent: #c0392b;
+      --accent-soft: #e8d5d3;
+      --teal: #1a6b6b;
+      --gold: #b8860b;
+      --rule: #d4cfc7;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 19px;
+      line-height: 1.75;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 40px 64px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: block;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.12;
+      margin-bottom: 28px;
+      color: #fff;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: #e8c4c0;
+    }
+
+    .deck {
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: #c8c2b8;
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .byline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: #888;
+      border-top: 1px solid #333;
+      padding-top: 20px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    /* ── BODY LAYOUT ── */
+    .article-body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 40px 100px;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 64px 0 20px;
+      line-height: 1.2;
+    }
+
+    h3 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin: 48px 0 16px;
+    }
+
+    p { margin-bottom: 1.5em; }
+
+    p + p { text-indent: 1.5em; }
+
+    strong { font-weight: 600; color: var(--ink); }
+
+    a { color: var(--teal); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* ── PULL QUOTE ── */
+    blockquote.pull {
+      border-left: 4px solid var(--accent);
+      margin: 48px 0;
+      padding: 8px 0 8px 32px;
+    }
+
+    blockquote.pull p {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--ink);
+      margin-bottom: 12px;
+      text-indent: 0;
+    }
+
+    blockquote.pull cite {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted);
+      font-style: normal;
+    }
+
+    /* ── STAT CALLOUTS ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin: 48px 0;
+    }
+
+    .stat-card {
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      border-top: 3px solid var(--accent);
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .stat-card .number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+
+    /* ── FIGURE PLACEHOLDER ── */
+    .figure {
+      margin: 48px -20px;
+      background: var(--paper-warm);
+      border: 1px solid var(--rule);
+      overflow: hidden;
+    }
+
+    .figure img {
+      width: 100%;
+      display: block;
+    }
+
+    .figure figcaption {
+      padding: 14px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      border-top: 1px solid var(--rule);
+      line-height: 1.5;
+    }
+
+    /* ── DATA TABLE ── */
+    .data-table-wrap {
+      margin: 40px 0;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    thead th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      border-bottom: 2px solid var(--ink);
+      padding: 10px 16px;
+      text-align: left;
+      background: var(--paper);
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--rule);
+      color: var(--ink-light);
+    }
+
+    tbody tr:hover td { background: var(--paper-warm); }
+
+    td.highlight { font-weight: 600; color: var(--accent); }
+
+    /* ── METHODOLOGY BOX ── */
+    .method-box {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 36px 40px;
+      margin: 56px 0;
+    }
+
+    .method-box h3 {
+      color: #c8c2b8;
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .method-box p {
+      font-size: 0.92rem;
+      color: #aaa;
+      line-height: 1.7;
+    }
+
+    .method-box p + p { text-indent: 0; }
+
+    .method-box code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      background: #2a2a2a;
+      padding: 2px 6px;
+      color: #e8c4c0;
+    }
+
+    /* ── FINDING BOX ── */
+    .finding {
+      border: 1px solid var(--accent-soft);
+      background: #fff8f7;
+      padding: 28px 32px;
+      margin: 40px 0;
+      position: relative;
+    }
+
+    .finding::before {
+      content: 'KEY FINDING';
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      position: absolute;
+      top: -1px;
+      left: 0;
+      background: var(--accent);
+      color: #fff;
+      padding: 3px 10px;
+    }
+
+    .finding p {
+      margin-top: 12px;
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    .finding p + p { text-indent: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: #777;
+      padding: 48px 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      line-height: 1.8;
+    }
+
+    footer .footer-inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    footer strong { color: #aaa; }
+
+    hr.section-rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 56px 0;
+    }
+
+    @media (max-width: 640px) {
+      .article-body { padding: 40px 24px 64px; }
+      .header-inner { padding: 56px 24px 48px; }
+      .figure { margin: 40px -8px; }
+      .method-box { padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <span class="kicker">Data Analysis · NHANES 2017–2018 · United States</span>
+    <h1>Can Your <em>Wage</em> Predict<br>Your Health?</h1>
+    <p class="deck">A data-driven investigation into whether income inequality leaves a biological signature — and what it means for all of us.</p>
+    <div class="byline">
+      <span>NHANES Data Analysis Project</span>
+      <span>n = 4,138 participants</span>
+      <span>Python · SQL · R</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── ARTICLE BODY ── -->
+<article class="article-body">
+
+  <!-- Opening quote -->
+  <blockquote class="pull" style="margin-top: 48px;">
+    <p>"The circumstances in which people are born, grow, live, work and age are the single most important determinants of good or ill health."</p>
+    <cite>— World Health Organisation, Commission on Social Determinants of Health</cite>
+  </blockquote>
+
+  <p>Think about two people. One grows up where money is tight — bills are a source of anxiety, nutritious food is a luxury, and a therapist is something other people have. The other grows up comfortable: regular holidays, a good GP, access to a gym. Both live in the same country, breathe the same air. But by middle age, are they really in the same health?</p>
+
+  <p>This question sits at the heart of one of the most underappreciated conversations in public health. And while the data here comes from the United States, the story it tells resonates just as sharply in Britain, where inequality has widened steadily over three decades. Using the <strong>National Health and Nutrition Examination Survey (NHANES)</strong>, this analysis examines whether income-to-poverty ratio can predict three key health outcomes: <strong>depression, blood pressure, and cholesterol</strong>. The findings are striking — and in at least one domain, unambiguous.</p>
+
+  <hr class="section-rule"/>
+
+  <h2>What the Data Shows</h2>
+
+  <p>The cleaned dataset includes <strong>4,138 adults</strong> with complete data across all variables, drawn from the NHANES 2017–2018 cycle. Participants were grouped by income-to-poverty ratio into five bands from "Below poverty" to "High."</p>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="number">4,138</div>
+      <div class="label">Participants after cleaning</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">−0.52</div>
+      <div class="label">PHQ-9 drop per income unit</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">p&lt;0.001</div>
+      <div class="label">Depression–income significance</div>
+    </div>
+    <div class="stat-card">
+      <div class="number">5</div>
+      <div class="label">Income groups compared</div>
+    </div>
+  </div>
+
+  <p>The headline result from our SQL analysis: average depression scores decrease consistently as income rises. Participants below the poverty line score meaningfully higher on the PHQ-9 depression scale than those in higher income brackets — a gradient that holds even when you control for age and education.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/01_depression_by_income.png" alt="Bar chart showing average PHQ-9 depression score by income group"/>
+    <figcaption>FIG. 1 — Average PHQ-9 depression score by income group. Lower scores indicate better mental health. Source: NHANES 2017–2018.</figcaption>
+  </div>
+
+  <div class="finding">
+    <p>For every one-unit increase in income-to-poverty ratio, PHQ-9 total scores decrease by <strong>0.52 points</strong> on average — a relationship that is highly statistically significant (p &lt; 0.0001) even after controlling for age and education level.</p>
+    <p>In plain terms: <strong>the more financial breathing room a person has, the lower their depression score tends to be.</strong></p>
+  </div>
+
+  <p>This is not a trivial finding. A PHQ-9 score of 5 or above indicates at least mild depression. The difference in average scores between the lowest and highest income groups in this dataset represents a meaningful clinical gap — the kind of difference that, at a population level, translates to vastly different rates of diagnosed depression, treatment, and long-term mental health outcomes.</p>
+
+  <hr class="section-rule"/>
+
+  <h2>The Shape of Depression Across Income Groups</h2>
+
+  <p>Averages can deceive. A more revealing picture emerges when we look at the full distribution of depression severity within each income group — not just where the average sits, but how many people are experiencing moderate or severe symptoms.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/03_depression_severity_stacked.png" alt="Stacked bar chart showing proportion of depression severity categories by income group"/>
+    <figcaption>FIG. 2 — Distribution of PHQ-9 depression severity categories by income group. The proportion experiencing moderate-to-severe depression is visibly higher in lower income bands. Source: NHANES 2017–2018.</figcaption>
+  </div>
+
+  <p>Lower income groups carry a heavier burden of moderate and severe depression — not just marginally higher average scores. Moderate-to-severe depression (PHQ-9 ≥ 10) is the threshold at which clinical intervention is typically recommended. Lower income is therefore associated not just with feeling slightly worse, but with a significantly higher likelihood of experiencing depression serious enough to warrant treatment.</p>
+
+  <blockquote class="pull">
+    <p>"People who have limited access to quality housing, education and job opportunities have a higher risk of illness and death."</p>
+    <cite>— WHO World Report on Social Determinants of Health Equity, 2025</cite>
+  </blockquote>
+
+  <p>For a British reader, this may feel abstract — after all, we have the NHS. But the mechanisms driving this pattern are not uniquely American. Financial stress, housing insecurity, precarious employment, and the inability to afford therapy are features of economic inequality wherever it exists.</p>
+
+  <hr class="section-rule"/>
+
+  <h2>Blood Pressure and Cholesterol: A More Complicated Picture</h2>
+
+  <p>If depression tells a clean story, blood pressure and cholesterol tell a more nuanced one — and that nuance is itself informative.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/02_bp_risk_by_income.png" alt="Bar chart showing percentage of participants with elevated blood pressure by income group"/>
+    <figcaption>FIG. 3 — Percentage of participants with systolic blood pressure ≥ 130 mmHg (the clinical threshold for elevated BP, per American Heart Association guidelines) by income group. Source: NHANES 2017–2018.</figcaption>
+  </div>
+
+  <p>There is a visible trend in elevated blood pressure rates across income groups, with lower income participants more likely to exceed the 130 mmHg systolic threshold. However, our regression found this did not reach statistical significance once we controlled for age and education (income coefficient: +0.069, p = 0.689). Age was the dominant predictor — systolic BP rises naturally with age, and this effect swamps the income signal.</p>
+
+  <div class="figure">
+    <img src="outputs/figures/04_cholesterol_boxplot.png" alt="Box plot showing distribution of total cholesterol by income group"/>
+    <figcaption>FIG. 4 — Distribution of total cholesterol (mg/dL) by income group. Diamond marker shows the group mean. Outliers shown as faded points. Source: NHANES 2017–2018.</figcaption>
+  </div>
+
+  <p>Cholesterol presents a borderline result: a positive income coefficient of 0.88 (p = 0.057) — just above the conventional significance threshold. This may reflect the fact that higher-income individuals can afford richer diets, or it may simply reflect the complexity of cholesterol metabolism, which is also heavily influenced by genetics and medication not captured here.</p>
+
+  <hr class="section-rule"/>
+
+  <h2>Putting It Together: What the Regression Tells Us</h2>
+
+  <p>The regression analysis models each health outcome as a function of income-to-poverty ratio, age, and education — the three variables available to us that capture socioeconomic and demographic context.</p>
+
+  <div class="data-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Health Outcome</th>
+          <th>Income Coefficient</th>
+          <th>p-value</th>
+          <th>R²</th>
+          <th>Significant?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Systolic Blood Pressure</td>
+          <td>+0.069</td>
+          <td>0.689</td>
+          <td>0.138</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td>Total Cholesterol</td>
+          <td>+0.883</td>
+          <td>0.057</td>
+          <td>0.004</td>
+          <td>Borderline</td>
+        </tr>
+        <tr>
+          <td><strong>PHQ-9 Depression</strong></td>
+          <td class="highlight">−0.525</td>
+          <td class="highlight">&lt;0.0001</td>
+          <td>0.068</td>
+          <td><strong>Yes ✓</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="figure">
+    <img src="outputs/figures/05_regression_coefficients.png" alt="Bar chart of regression coefficients for income predicting each health outcome"/>
+    <figcaption>FIG. 5 — Regression coefficients for income-to-poverty ratio predicting each health outcome, controlling for age and education. Blue = statistically significant (p &lt; 0.05). Source: NHANES 2017–2018.</figcaption>
+  </div>
+
+  <p>The negative coefficient for depression is the most important number in this analysis — higher income predicts lower depression, and this survives controls for both age and education. Blood pressure is dominated by age, and cholesterol remains hard to predict from socioeconomic variables alone. The R² values are modest across all models, which is expected in health data, but an R² of 0.068 for depression still represents a meaningful signal from just three predictors.</p>
+
+  <hr class="section-rule"/>
+
+  <h2>Why Does This Happen? The Mechanisms Behind the Numbers</h2>
+
+  <p>Data can show us <em>that</em> a relationship exists. Understanding <em>why</em> requires us to think carefully about the pathways connecting income to mental health.</p>
+
+  <h3>Financial stress as a direct cause</h3>
+  <p>The most direct pathway is chronic stress. When money is tight, the daily cognitive load of managing bills and financial uncertainty is relentless. Sustained stress elevates cortisol — and chronic high cortisol is strongly associated with depression, anxiety, and poor sleep.</p>
+
+  <h3>Access to mental health support</h3>
+  <p>In both the US and UK, private therapy is expensive. NHS waiting lists for talking therapies regularly exceed six months. Higher-income individuals bypass these waits through private services that lower-income people simply cannot afford. When depression strikes, access to treatment is itself income-stratified.</p>
+
+  <h3>Why physical health markers are noisier</h3>
+  <p>Blood pressure and cholesterol are influenced by a far wider range of factors — genetics, medication, diet, alcohol — that don't map neatly onto income. This is not to say income doesn't matter for physical health (it does), but it means a dataset of this size struggles to isolate the income signal from the noise.</p>
+
+  <hr class="section-rule"/>
+
+  <h2>A Note on Causation</h2>
+
+  <div class="method-box">
+    <h3>Methodology Note</h3>
+    <p>This analysis uses <strong>observational, cross-sectional data</strong>. The relationships identified are correlational — we cannot conclude that low income <em>causes</em> poor mental health. Depression itself may reduce earning capacity, reversing the causal arrow, and unmeasured variables (childhood adversity, chronic illness) may drive both simultaneously.</p>
+    <p>Establishing causality would require longitudinal data or causal inference methods such as instrumental variables. The regression models control for age and education, reducing but not eliminating confounding. Findings should be interpreted as <strong>strong evidence of association</strong>, consistent with a large body of causal evidence from other research designs. Models run using <code>statsmodels OLS</code> in Python; visualisations with <code>ggplot2</code> in R.</p>
+  </div>
+
+  <hr class="section-rule"/>
+
+  <h2>Conclusions</h2>
+
+  <p>This analysis set out to ask whether income can predict health. For mental health, the answer is a clear and statistically robust <strong>yes</strong>. For blood pressure and cholesterol, the picture is more complex — age and genetics introduce noise that income alone cannot cut through.</p>
+
+  <p>The core finding — higher income is significantly associated with lower depression scores, even controlling for age and education — is consistent with the broader literature on social determinants of health. Economic inequality is not merely a financial problem. It is a public health problem. And if we want a healthier population, the data points clearly toward the upstream causes: the structural conditions in which people live, work, and age.</p>
+
+  <hr class="section-rule"/>
+
+  <h2>Data & Reproducibility</h2>
+
+  <p>All analysis code is available in the accompanying GitHub repository. The dataset is from the <strong>NHANES 2017–2018 survey cycle</strong>, publicly available from the US Centers for Disease Control. Scripts run sequentially in Python (cleaning, SQL, regression) and R (visualisations) from a single cleaned CSV. Contextual statistics were scraped from the Mental Health Foundation, WHO, and Mental Health America using a Python <code>BeautifulSoup</code> scraper. See the README for full reproduction instructions.</p>
+
+</article>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <strong>Data Sources</strong><br>
+    NHANES 2017–2018 · Centers for Disease Control and Prevention · wwwn.cdc.gov/nchs/nhanes<br>
+    Mental Health Foundation · mentalhealth.org.uk<br>
+    World Health Organisation · who.int<br>
+    Mental Health America · mhanational.org<br><br>
+    <strong>Tools</strong><br>
+    Python 3 · pandas · statsmodels · sqlite3 · requests · beautifulsoup4<br>
+    R · ggplot2 · dplyr · readr<br><br>
+    <strong>Limitations</strong><br>
+    Cross-sectional data · US sample · Correlational findings only · Modest R² values<br><br>
+    Undergraduate Data Science Project · NHANES Health &amp; Income Analysis
+  </div>
+</footer>
+
+</body>
+</html>
