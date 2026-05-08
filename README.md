@@ -12,6 +12,10 @@ This project investigates whether income-to-poverty ratio is a statistically sig
 
 ---
 
+## Blog
+
+The full write-up is available at: https://anyakb.github.io/NHANES/blog.html
+
 ## Repository Structure
 
 ```
